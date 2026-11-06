@@ -1,11 +1,12 @@
 import { type FC, useEffect, useState } from 'react';
-import type { AggregateCredits, Season, TvShowDetails } from '../types';
+import type { AggregateCredits, Crew, Season, TvShowDetails } from '../types';
 import { useSelectionContext } from '../SelectionContext';
 import settings from '../settings.json';
 import { PosterImage } from '../PosterImage/PosterImage';
 import config  from '../config.json';
 import circleX from '../assets/x-circle.svg';
 import { StarRating } from '../StarRating/StarRating';
+import missingposter from '../assets/poster-placeholder.png';
 
 export const TVSeriesDetail:FC = () => {
     const [seriesDetail, setSeriesDetail] = useState<TvShowDetails|null>(null)
@@ -74,7 +75,10 @@ export const TVSeriesDetail:FC = () => {
                         <div onClick={() => setTab('crew')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Crew</div>
                     </div>
                     {
-                        tab === 'cast' && aggregateCredits && <AggregateCastList castAndCrew={aggregateCredits} />
+                        tab === 'cast' && aggregateCredits && <AggregateCastList castAndCrew={aggregateCredits} show={"cast"}/>
+                    }
+                    {
+                        tab === 'crew' && aggregateCredits && <AggregateCastList castAndCrew={aggregateCredits} show={"crew"}/>
                     }
                     {
                         tab === 'seasons' && seriesDetail.seasons && <Seasons seasons={seriesDetail.seasons} />
@@ -88,17 +92,19 @@ export const TVSeriesDetail:FC = () => {
 
 interface AggregateCastListProps {
     castAndCrew: any;
+    show: "cast" | "crew";
 }
 
 const AggregateCastList: FC<AggregateCastListProps> = (props:AggregateCastListProps) => {
     const [cast, setCast] = useState<AggregateCredits>(props.castAndCrew);
+    const context = useSelectionContext();
 
     return (
         <>
             {
-                cast && cast.cast.slice(0, Math.min(cast.cast.length-1,9)).map( item => {
+                props.show === 'cast' ? cast && cast.cast.slice(0, Math.min(cast.cast.length-1,9)).map( item => {
                     return (
-                    <div key={item.id} className='flex flex-row p-2 gap-2'>
+                    <div key={item.id} className='flex flex-row p-2 gap-2' onClick={() => context.push({display: "person-details", tmdbId: item.id})}>
                         {/* <div style={{height: "48px", width: "48px", borderRadius: "50%", overflow: "hidden"}}> */}
                         {/* <div className="w-16 h-16 overflow-hidden rounded-full"> */}
                             <img 
@@ -120,10 +126,37 @@ const AggregateCastList: FC<AggregateCastListProps> = (props:AggregateCastListPr
                         </div>
                     </div>
                     )
-                })
-            }
-            {
-                cast && cast.cast.length > 10 ? (<div className='cursor-pointer'>floore...</div>) : ""
+                }) :
+                props.show === 'crew' ? cast && cast.crew.slice(0, Math.min(cast.crew.length-1,9)).map( item => {
+                    return (
+                    <div key={item.id} className='flex flex-row p-2 gap-2' onClick={() => context.push({display: "person-details", tmdbId: item.id})}>
+                        {/* <div style={{height: "48px", width: "48px", borderRadius: "50%", overflow: "hidden"}}> */}
+                        {/* <div className="w-16 h-16 overflow-hidden rounded-full"> */}
+                            <img 
+                                style={{
+                                    width: "48px",
+                                    aspectRatio: "1 / 1",
+                                    borderRadius: "50%",
+                                    objectFit: "cover"
+                                }} 
+                                // className='w-full h-full object-cover object-top'
+                                src={item.profile_path !== null ? `${config.images.base_url}${config.images.profile_sizes[1]}${item.profile_path}` : missingposter} 
+                                alt={item.name} 
+                                title={item.name}/>
+                        {/* </div> */}
+                        {/* </div> */}
+                        <div className='flex flex-col text-left px-4 mt-[-0.2rem]'>
+                            <div><strong>{item.name}</strong></div>
+                            {
+                                item.jobs.map((job,index) => <div key={index}><em>{job.job}</em></div>)
+                            }
+                        </div>
+                    </div>
+                    )
+                }) : null   
+            } 
+            {          
+                cast[props.show].length > 10 ? (<div className='cursor-pointer'>floore...</div>) : ""
             }
         </>
     )
