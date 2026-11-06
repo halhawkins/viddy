@@ -1,0 +1,48 @@
+<svg width="780" height="1170" viewBox="0 0 780 1170" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2b2a28"/>
+      <stop offset="100%" stop-color="#1e1d1b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="780" height="1170" fill="url(#bg)"/>
+
+  <!-- inner border, like a VHS case label edge -->
+  <rect x="24" y="24" width="732" height="1122" fill="none" stroke="#4a4742" stroke-width="1.5"/>
+
+  <!-- film frame icon, centered -->
+  <g transform="translate(390,520)" stroke="#8a8579" stroke-width="3" fill="none" stroke-linejoin="round">
+    <rect x="-70" y="-95" width="140" height="190" rx="4"/>
+    <!-- sprocket holes -->
+    <rect x="-70" y="-80" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="-70" y="-45" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="-70" y="-10" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="-70" y="25" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="-70" y="60" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="56" y="-80" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="56" y="-45" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="56" y="-10" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="56" y="25" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <rect x="56" y="60" width="14" height="10" fill="#8a8579" stroke="none"/>
+    <!-- play triangle -->
+    <path d="M -14 -22 L 22 0 L -14 22 Z" fill="#8a8579" stroke="none"/>
+  </g>
+
+  <!-- title text -->
+  <text x="390" y="695" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
+        font-size="20" letter-spacing="3" fill="#8a8579">NO ARTWORK</text>
+  <text x="390" y="722" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
+        font-size="20" letter-spacing="3" fill="#8a8579">AVAILABLE</text>
+
+  <!-- top and bottom hairlines, like a case sticker -->
+  <line x1="60" y1="90" x2="720" y2="90" stroke="#4a4742" stroke-width="1"/>
+  <line x1="60" y1="1080" x2="720" y2="1080" stroke="#4a4742" stroke-width="1"/>
+
+  <!-- small corner tick marks for a "label" feel -->
+  <text x="60" y="72" font-family="Helvetica, Arial, sans-serif" font-size="13"
+        letter-spacing="2" fill="#5c584f">FEATURE PRESENTATION</text>
+  <text x="720" y="1102" text-anchor="end" font-family="Helvetica, Arial, sans-serif"
+        font-size="13" letter-spacing="2" fill="#5c584f">780 × 1170</text>
+</svg>

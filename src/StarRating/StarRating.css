@@ -1,0 +1,20 @@
+.star-rating {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.star-rating__star {
+  color: #ddd;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.star-rating__star--full {
+  color: orange;
+}
+
+.star-rating__star--half {
+  background: linear-gradient(90deg, orange 50%, #ddd 50%);
+  background-clip: text;
+  color: transparent;
+}
