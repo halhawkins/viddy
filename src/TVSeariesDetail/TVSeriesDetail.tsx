@@ -7,6 +7,7 @@ import config  from '../config.json';
 import circleX from '../assets/x-circle.svg';
 import { StarRating } from '../StarRating/StarRating';
 import missingposter from '../assets/poster-placeholder.png';
+import { ImagesCollection } from '../ImagesCollection/ImagesCollection';
 
 export const TVSeriesDetail:FC = () => {
     const [seriesDetail, setSeriesDetail] = useState<TvShowDetails|null>(null)
@@ -55,7 +56,7 @@ export const TVSeriesDetail:FC = () => {
 
     // useEffect(() => {},[])
     return (
-        <div className='text-left'>
+        <div className='text-left contents'>
             <div className='inline-block relative z-10 top-[48px]' onClick={handleXClick}><img className='invert w-12' src={circleX} /></div>
             {
                 (seriesDetail) &&
@@ -72,7 +73,8 @@ export const TVSeriesDetail:FC = () => {
                     <div className='p-2 flex flex-row align-start text-black'>
                         <div onClick={() => setTab('seasons')} className={`inline-block text-lg font-bold px-6 ${tab === 'seasons' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Seasons</div >&nbsp;|&nbsp;
                         <div onClick={() => setTab('cast')} className={`inline-block text-lg font-bold px-6 ${tab === 'cast' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Cast</div>&nbsp;|&nbsp;
-                        <div onClick={() => setTab('crew')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Crew</div>
+                        <div onClick={() => setTab('crew')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Crew</div>&nbsp;|&nbsp;
+                        <div onClick={() => setTab('images')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Images</div>
                     </div>
                     {
                         tab === 'cast' && aggregateCredits && <AggregateCastList castAndCrew={aggregateCredits} show={"cast"}/>
@@ -83,8 +85,11 @@ export const TVSeriesDetail:FC = () => {
                     {
                         tab === 'seasons' && seriesDetail.seasons && <Seasons seasons={seriesDetail.seasons} />
                     }
+                    {
+                        tab === 'images' && <ImagesCollection />
+                    }
+                </div>
             </div>
-        </div>
             }
         </div>
     );
