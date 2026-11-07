@@ -2,6 +2,7 @@ import { type ReactNode, createContext, useState, useContext, useCallback, useMe
 
 type Display =
   | 'trending' | 'new' | 'popular-tv' | 'popular-movies' | 'search' | 'lists' | 'tv-series-details'
+  | 'image-browser'
   | 'series-credits' | 'movie-credits' | 'episode-credits' | 'person-credits'
   | 'to-watch' | 'watched' | 'movie-details' | 'series-details'
   | 'person-details' | 'season-details' | 'episode-details' | 'none';
