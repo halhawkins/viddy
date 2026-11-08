@@ -1,4 +1,5 @@
 import { type ReactNode, createContext, useState, useContext, useCallback, useMemo } from 'react';
+import type { ImageItem } from './ImagesCollection/ImagesCollection';
 
 type Display =
   | 'trending' | 'new' | 'popular-tv' | 'popular-movies' | 'search' | 'lists' | 'tv-series-details'
@@ -17,6 +18,8 @@ export interface Selection {
   seasonNumber?: number;
   episodeNumber?: number;
   page?: number | null;
+  imageCollection?: ImageItem[];
+  imageSelection?: number;
 }
 
 const initialSelection: Selection = {
@@ -31,6 +34,7 @@ const initialSelection: Selection = {
 interface SelectionContextType extends Selection {
   history: Selection[];                 // breadcrumb trail (previous entries)
   setDisplay: (display: Display) => void;
+  setImageCollection: (connection: ImageItem[]) => void;
   setPage: (page: number | null) => void;
   setQueryString: (q: string) => void;
   setMedia: (mediaType: Selection['mediaType'], tmdbId: number | null,
@@ -46,6 +50,10 @@ const SelectionContext = createContext<SelectionContextType | undefined>(undefin
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [current, setCurrent] = useState<Selection>(initialSelection);
   const [history, setHistory] = useState<Selection[]>([]);
+
+  const setImageCollection = useCallback((collection: ImageItem[]) => {
+    setCurrent(c => ({ ...c, collection}))
+  }, [])
 
   const setDisplay = useCallback((display: Display) => {
     setCurrent(c => ({ ...c, display }));
@@ -92,6 +100,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo<SelectionContextType>(() => ({
     ...current, history,
+    setImageCollection,
     setDisplay, setPage, setQueryString, setMedia, push, pop, popTo, reset,
   }), [current, history, setDisplay, setPage, setQueryString, setMedia, push, pop, popTo, reset]);
 

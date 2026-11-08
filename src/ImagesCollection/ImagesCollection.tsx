@@ -1,9 +1,10 @@
-import { type FC, useEffect, useState } from "react";
+import { type FC, type MouseEvent, useEffect, useState } from "react";
 import settings from '../settings.json';
 import config from '../config.json';
 import { useSelectionContext } from "../SelectionContext";
+// import circleX from '../assets/x-circle.svg';
 
-interface ImageItem {
+export interface ImageItem {
     aspect_ratio: number;
     height: number;
     iso_639_1: string;
@@ -12,7 +13,7 @@ interface ImageItem {
     vote_count: number;
     width: number;
 }
-interface ImageCollection {
+export interface ImageCollection {
     id: number;
     backdrops?: ImageItem[];
     logos?: ImageItem[];
@@ -44,8 +45,19 @@ export const ImagesCollection:FC = () => {
         getImages();
     },[])
 
+    const handleImageClick = (e:MouseEvent<HTMLImageElement>, index:number) => {
+        if (imagesCollection && tab) {
+            context.push({
+                display: 'image-browser',
+                imageSelection: index,
+                imageCollection: imagesCollection[tab] 
+            });
+        }
+    }
+
     return (
-        <div className="w-full flex flex-col p-4 contents">
+        <div className="w-full relative contents">
+        <div className="w-full flex flex-col p-4 contents t-10">
             <div className="flex flex-row p-2">
                 {tabNames.map((item, index) => {
                     return <><div 
@@ -61,6 +73,7 @@ export const ImagesCollection:FC = () => {
                     (imagesCollection && tab) && imagesCollection[tab]?.map((item, index) => {
                     return (
                         <img 
+                            onClick={(e) => handleImageClick(e, index) /*context.push({display: 'image-browser', imageSelection: index})*/}
                             className="w-60 hover:w-65 h-auto" 
                             src={`${config.images.base_url}original${imagesCollection[tab]?.[index]?.file_path}`} alt={`${tab} image`} 
                             title={`${context.title}\nLamguage: ${item.iso_639_1}`}
@@ -79,6 +92,37 @@ export const ImagesCollection:FC = () => {
             }
             <div></div>
             </div> */}
+        </div>
+        </div>
+    )
+}
+
+interface ImageBrowserProps {
+    images?: ImageItem[];
+}
+
+export const ImageBrowser:FC = () => {
+    const context = useSelectionContext();
+    const [collection, setCollection] = useState<ImageItem[]>([]);
+    
+    useEffect(() => {
+        if (context.imageCollection && context.imageCollection.length > 0) {
+            setCollection(context.imageCollection);
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log("kopijj",collection)
+        // console.log(`${config.images.base_url}original${collection[0].file_path}`)
+    }, [collection]);
+
+    return (        
+
+        <div className='text-left contents'>
+            {/* <div className='inline-block relative z-10 top-[55px] border-yellow-300 z-20' onClick={() => context.pop()}><img className='w-12' src={circleX} /></div> */}
+            {/* <div className='inline-block relative z-10 top-[48px]' onClick={() => context.pop()}><img className='invert w-12' src={circleX} /></div> */}
+            {collection.length>0? <img src={`${config.images.base_url}original${collection[context.imageSelection as number].file_path}`} />: null}
+            {/* <img src={`${config.images.base_url}original${collection[0].file_path}`} /> */}
         </div>
     )
 }

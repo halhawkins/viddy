@@ -57,7 +57,7 @@ export const TVSeriesDetail:FC = () => {
     // useEffect(() => {},[])
     return (
         <div className='text-left contents'>
-            <div className='inline-block relative z-10 top-[48px]' onClick={handleXClick}><img className='invert w-12' src={circleX} /></div>
+            {/* <div className='inline-block relative z-10 top-[48px]' onClick={handleXClick}><img className='invert w-12' src={circleX} /></div> */}
             {
                 (seriesDetail) &&
             <div style={{ backgroundImage: `url(${imageHost}original${seriesDetail?.backdrop_path})`}} className='flex flex-col gap-2 relative bg-cover bg-center bg-fixed p-2 '>
@@ -175,20 +175,22 @@ const Seasons:FC<SeasonProps> = (props:SeasonProps) => {
     const context = useSelectionContext();
     const imageHost = "https://image.tmdb.org/t/p/";
     return (
-        <div style={{gridTemplateColumns: "64px 1fr"}} className='grid gap-4'>
-        <div className='w-20'></div>
-        <div className='w-32'>Name</div>
-        {props.seasons.map(item => {
-            return (
-                <>
-                <div className='p-1' onClick={() => context.push({display:"season-details", seasonNumber: item.season_number})}>
-                    <PosterImage item={{...item, media_type: 'tv'}} />
-                </div>
-                <div className='px-2 font-bold p-2'>
-                    {item.name}
-                </div>
-            </>)
-        })}
+        <div className='flex flex-col gap-4'>
+            <div className='flex flex-row'>
+                <div className='w-20'></div>
+                <div className='w-32'>Name</div>
+            </div>
+            {props.seasons.map(item => {
+                return (
+                    <div className='flex flex-row h-24' key={item.id}>
+                        <div className='p-1 w-20' onClick={() => context.push({display:"season-details", seasonNumber: item.season_number})}>
+                            <PosterImage item={{...item, media_type: 'tv'}} />
+                        </div>
+                        <div className='px-2 font-bold p-2'>
+                            {item.name}
+                        </div>
+                    </div>)
+            })}
         </div>
     )
 }

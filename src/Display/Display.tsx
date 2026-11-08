@@ -12,6 +12,7 @@ import { CastList } from '../FullCast/FullCast';
 import { TVSeason } from '../TVSeariesDetail/TVSeason';
 import { TVEpisode } from '../TVSeariesDetail/TVEpisode';
 import { PersonDetailsView } from '../PersonDetailsView/PersonDetailsView';
+import { ImageBrowser } from '../ImagesCollection/ImagesCollection';
 
 export const Display: FC = () => {
     const selectionCtx = useSelectionContext();
@@ -57,6 +58,8 @@ export const Display: FC = () => {
             return <TVEpisode />
           case 'person-details':
             return <PersonDetailsView />
+          case 'image-browser':
+            return <ImageBrowser />
           default:
             return <Trending />;
         }
