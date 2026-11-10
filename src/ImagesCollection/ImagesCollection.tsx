@@ -1,8 +1,10 @@
-import { type FC, type MouseEvent, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import settings from '../settings.json';
 import config from '../config.json';
 import { useSelectionContext } from "../SelectionContext";
-// import circleX from '../assets/x-circle.svg';
+import circleX from '../assets/x-circle.svg';
+import leftArrow from '../assets/arrow-left-cricle.svg';
+import rightArrow from '../assets/arrow-right-cricle.svg';
 
 export interface ImageItem {
     aspect_ratio: number;
@@ -24,7 +26,6 @@ type ImageTab = 'backdrops' | 'logos' | 'posters' | 'profiles';
 
 export const ImagesCollection:FC = () => {
     const [imagesCollection, setImagesCollection] = useState<ImageCollection>();
-    const [imageNumber, setImageNumber] = useState<number>(0);
     const [tabNames, setTabNames] = useState<ImageTab[]>([]);
     const [tab, setTab] = useState<ImageTab>();
     const context = useSelectionContext();
@@ -45,7 +46,7 @@ export const ImagesCollection:FC = () => {
         getImages();
     },[])
 
-    const handleImageClick = (e:MouseEvent<HTMLImageElement>, index:number) => {
+    const handleImageClick = (index:number) => {
         if (imagesCollection && tab) {
             context.push({
                 display: 'image-browser',
@@ -73,7 +74,7 @@ export const ImagesCollection:FC = () => {
                     (imagesCollection && tab) && imagesCollection[tab]?.map((item, index) => {
                     return (
                         <img 
-                            onClick={(e) => handleImageClick(e, index) /*context.push({display: 'image-browser', imageSelection: index})*/}
+                            onClick={() => handleImageClick(index)}
                             className="w-60 hover:w-65 h-auto" 
                             src={`${config.images.base_url}original${imagesCollection[tab]?.[index]?.file_path}`} alt={`${tab} image`} 
                             title={`${context.title}\nLamguage: ${item.iso_639_1}`}
@@ -82,47 +83,46 @@ export const ImagesCollection:FC = () => {
                 }
             )}
             </div>
-            {/* <div className="flex content-center">{
-                (imagesCollection && tab && imagesCollection[tab]?.[imageNumber]) ?
-                <div className="p-4 relative">
-                    <div className="inline-flex flex-col bg-red-500 text-white justify-center flex-nowrap"><div>&lt;</div></div>
-                    <img src={`${config.images.base_url}original${imagesCollection[tab]?.[imageNumber]?.file_path}`} alt="image" />
-                    <div className="inline bg-red-500 text-white right-full translate-y-1/2 fixed z-10">&gt;</div>
-                </div> : null
-            }
-            <div></div>
-            </div> */}
         </div>
         </div>
     )
 }
 
-interface ImageBrowserProps {
-    images?: ImageItem[];
-}
-
 export const ImageBrowser:FC = () => {
     const context = useSelectionContext();
-    const [collection, setCollection] = useState<ImageItem[]>([]);
-    
-    useEffect(() => {
-        if (context.imageCollection && context.imageCollection.length > 0) {
-            setCollection(context.imageCollection);
-        }
-    }, []);
-
-    useEffect(() => {
-        console.log("kopijj",collection)
-        // console.log(`${config.images.base_url}original${collection[0].file_path}`)
-    }, [collection]);
+    const [collection] = useState<ImageItem[]>(context.imageCollection ?? []);
+    const [imageIndex, setImageIndex] = useState(context.imageSelection ?? 0);
 
     return (        
-
-        <div className='text-left contents'>
-            {/* <div className='inline-block relative z-10 top-[55px] border-yellow-300 z-20' onClick={() => context.pop()}><img className='w-12' src={circleX} /></div> */}
-            {/* <div className='inline-block relative z-10 top-[48px]' onClick={() => context.pop()}><img className='invert w-12' src={circleX} /></div> */}
-            {collection.length>0? <img src={`${config.images.base_url}original${collection[context.imageSelection as number].file_path}`} />: null}
-            {/* <img src={`${config.images.base_url}original${collection[0].file_path}`} /> */}
+        <div className='text-left'>
+            <div className='inline-block relative w-[45px] h-[45px] rounded-full z-10 top-[55px] border-2 text-shadow-blue-950 z-20 bg-[#fff5] bg-opacity-80 hover:bg-[#fffa]' onClick={() => context.pop()}>
+                <img className='w-10' src={circleX} />
+            </div>
+            {collection[imageIndex] && (
+                <div className='relative inline-block max-w-full align-top'>
+                    <img
+                        className='block max-w-full h-auto'
+                        src={`${config.images.base_url}original${collection[imageIndex].file_path}`}
+                        alt='Selected image'
+                    />
+                    <button
+                        type='button'
+                        aria-label='Previous image'
+                        className='absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-[#fff5] hover:bg-[#fffa]'
+                        onClick={() => setImageIndex((current) => (current - 1 + collection.length) % collection.length)}
+                    >
+                        <img className='w-[45px] h-[45px]' src={leftArrow} alt='' />
+                    </button>
+                    <button
+                        type='button'
+                        aria-label='Next image'
+                        className='absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-[#fff5] hover:bg-[#fffa]'
+                        onClick={() => setImageIndex((current) => (current + 1) % collection.length)}
+                    >
+                        <img className='w-[45px] h-[45px]' src={rightArrow} alt='' />
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

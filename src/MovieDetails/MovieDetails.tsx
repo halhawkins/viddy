@@ -128,8 +128,6 @@ export const TopCastList: FC<TopCastListProps> = ({castAndCrew, view}) => {
                 castList.slice(0, 10).map(item => {
                     return (
                     <div onClick={()=>context.push({display: "person-details", tmdbId: item.id, mediaType: 'none'})} key={item.id} className='flex flex-row p-2 gap-2'>
-                        {/* <div style={{height: "48px", width: "48px", borderRadius: "50%", overflow: "hidden"}}> */}
-                        {/* <div className="w-16 h-16 overflow-hidden rounded-full"> */}
                             <img 
                                 style={{
                                     width: "48px",
@@ -137,12 +135,9 @@ export const TopCastList: FC<TopCastListProps> = ({castAndCrew, view}) => {
                                     borderRadius: "50%",
                                     objectFit: "cover"
                                 }} 
-                                // className='w-full h-full object-cover object-top'
                                 src={item.profile_path !== null ? `${config.images.base_url}${config.images.profile_sizes[1]}${item.profile_path}` : missingPoster} 
                                 alt={item.name} 
                                 title={item.name}/>
-                        {/* </div> */}
-                        {/* </div> */}
                         <div className='flex flex-col text-left px-4 mt-[-0.2rem]'>
                             <div><strong>{item.name}</strong></div>
                             <div><em>{'character' in item ? item.character : item.job}</em></div>
