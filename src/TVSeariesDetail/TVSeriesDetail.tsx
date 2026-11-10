@@ -57,7 +57,7 @@ export const TVSeriesDetail:FC = () => {
     // useEffect(() => {},[])
     return (
         <div className='text-left contents'>
-            {/* <div className='inline-block relative z-10 top-[48px]' onClick={handleXClick}><img className='invert w-12' src={circleX} /></div> */}
+            <div className='inline-block relative z-10 top-[48px]' onClick={handleXClick}><img className='invert w-12' src={circleX} /></div>
             {
                 (seriesDetail) &&
             <div style={{ backgroundImage: `url(${imageHost}original${seriesDetail?.backdrop_path})`}} className='flex flex-col gap-2 relative bg-cover bg-center bg-fixed p-2 '>
