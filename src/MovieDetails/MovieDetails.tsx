@@ -7,12 +7,13 @@ import config  from '../config.json';
 import circleX from '../assets/x-circle.svg';
 import { StarRating } from '../StarRating/StarRating';
 import missingPoster from '../assets/poster-placeholder.png';
+import { ImagesCollection } from '../ImagesCollection/ImagesCollection';
 
 export const MovieDetail:FC = () => {
     const [movieDetail, setMovieDetail] = useState<MovieDetails|null>(null)
     const [topCredits, setTopCredits] = useState<Credits|null>(null);
     const ctx = useSelectionContext();
-    const [tab, setTab] = useState<CastView>("cast");
+    const [tab, setTab] = useState<tabView>("cast");
     const imageHost = "https://image.tmdb.org/t/p/";
 
     const getDetails = async () => {
@@ -71,13 +72,17 @@ export const MovieDetail:FC = () => {
                <div className='flex flex-col w-full bg-[#fffb] p-4'>
                     <div className='p-2 flex flex-row align-start text-black'>
                         <div onClick={() => setTab('cast')} className={`inline-block text-lg font-bold px-6 ${tab === 'cast' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Cast</div>&nbsp;|&nbsp;
-                        <div onClick={() => setTab('crew')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Crew</div>
+                        <div onClick={() => setTab('crew')} className={`inline-block text-lg font-bold px-6 ${tab === 'crew' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Crew</div>&nbsp;|&nbsp;
+                        <div onClick={() => setTab('images')} className={`inline-block text-lg font-bold px-6 ${tab === 'images' ? 'bg-black text-white rounded-r-full rounded-l-full' : 'bg-trandparent text-black'}`}>Images</div>
                     </div>
                     {
-                        topCredits && <TopCastList castAndCrew={topCredits} view={tab} />
+                        (tab === 'cast' || tab === 'crew') && topCredits && <TopCastList castAndCrew={topCredits} view={tab} />
                     }
                     {
                         // tab === 'seasons' && movieDetail.seasons && <Seasons seasons={movieDetail.seasons} />
+                    }
+                    {
+                        tab === 'images' && <ImagesCollection />
                     }
             </div>
         </div>
@@ -86,11 +91,11 @@ export const MovieDetail:FC = () => {
     );
 }
 
-export type CastView = 'cast' | 'crew';
+export type tabView = 'cast' | 'crew' | 'images';
 
 type TopCastListProps = {
     castAndCrew: Credits | TvEpisodeCredit,
-    view: CastView;
+    view: tabView;
 }
 
 export const TopCastList: FC<TopCastListProps> = ({castAndCrew, view}) => {
